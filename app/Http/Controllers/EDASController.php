@@ -12,6 +12,8 @@ class EDASController extends Controller
 {
     public function index()
     {
+        if (!session('jenis_analisis_id')) {
+        return redirect()->route('jenis-analisis.index')->with('error', 'Silakan pilih jenis analisis terlebih dahulu.');}
         
         $jenisAnalisisId = session('jenis_analisis_id');
         $jenis_analisis_id = session('jenis_analisis_id');

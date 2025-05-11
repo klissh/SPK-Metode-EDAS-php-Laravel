@@ -1,99 +1,121 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container-fluid px-4">
-    <div class="mb-4">
-        <h4 class="fw-bold text-success">
-            <i class="bi bi-calculator-fill me-2"></i>Data Alternatif
-        </h4>
-        <p class="text-muted ms-1">
-            Jenis Analisis: <strong>({{ $jenis_analisis->nama ?? '' }})</strong>
+<div class="space-y-6">
+
+    {{-- Heading --}}
+    <div>
+        <h2 class="text-2xl font-semibold text-slate-800 flex items-center gap-2">
+            <i class="bi bi-calculator-fill text-emerald-500"></i> Data Alternatif
+        </h2>
+        <p class="text-gray-600 mt-1">
+            Jenis Analisis: <span class="ml-2 inline-block text-sm font-bold text-emerald-700 bg-emerald-100 px-3 py-1 rounded-xl shadow"> ({{ $jenis_analisis->nama ?? '' }}) </span>
         </p>
     </div>
 
     {{-- Notifikasi Sukses --}}
     @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert" id="successAlert">
-            <i class="bi bi-check-circle-fill me-2"></i>
-            <strong>Berhasil!</strong> {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Tutup"></button>
+        <div id="successAlert"
+           class="bg-emerald-100 border border-emerald-300 text-emerald-800 px-4 py-3 rounded relative shadow transition-opacity"
+           role="alert">
+          <strong class="font-bold">Berhasil!</strong> <span class="block sm:inline">{{ session('success') }}</span>
         </div>
     @endif
 
+
+
     {{-- Notifikasi Error --}}
     @if($errors->any())
-        <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
-            <i class="bi bi-exclamation-triangle-fill me-2"></i>
-            <strong>Terjadi kesalahan:</strong>
-            <ul class="mb-0 mt-2">
+        <div class="bg-red-100 border border-red-300 text-red-800 px-4 py-3 rounded shadow relative">
+            <strong class="font-bold">Terjadi kesalahan:</strong>
+            <ul class="list-disc pl-6 mt-2 text-sm">
                 @foreach($errors->all() as $error)
                     <li>{{ $error }}</li>
                 @endforeach
             </ul>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Tutup"></button>
         </div>
     @endif
 
-    <div class="mb-3 d-flex justify-content-between">
-        <a href="{{ route('alternatif.create') }}" class="btn btn-success shadow-sm">
+    {{-- Tombol --}}
+    <div class="flex justify-between gap-3 flex-wrap">
+        <a href="{{ route('alternatif.create') }}"
+           class="bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-2 px-4 rounded-lg shadow transition">
             <i class="bi bi-plus-circle me-1"></i> Tambah Alternatif
         </a>
-        <a href="{{ route('jenis-analisis.index') }}" class="btn btn-outline-secondary shadow-sm">
+        <a href="{{ route('jenis-analisis.index') }}"
+           class="bg-gray-200 hover:bg-gray-300 text-slate-700 font-semibold py-2 px-4 rounded-lg transition">
             <i class="bi bi-arrow-left-circle me-1"></i> Kembali ke Jenis Analisis
         </a>
     </div>
 
-    <div class="table-responsive rounded-3 shadow-sm">
-        <table class="table table-hover align-middle table-bordered mb-0 bg-white">
-            <thead class="table-success text-center">
+    {{-- Tabel --}}
+    <div class="overflow-x-auto bg-white shadow rounded-lg">
+        <table class="min-w-full text-sm text-left text-slate-600">
+            <thead class="bg-emerald-100 text-emerald-700 uppercase text-xs">
                 <tr>
-                    <th>No</th>
-                    <th>Kode</th>
-                    <th>Nama Alternatif</th>
-                    <th>Aksi</th>
+                    <th class="px-6 py-3 text-center">No</th>
+                    <th class="px-6 py-3 text-center">Kode</th>
+                    <th class="px-6 py-3">Nama Alternatif</th>
+                    <th class="px-6 py-3 text-center">Aksi</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach($alternatifs as $alt)
-                <tr>
-                    <td class="text-center">{{ $loop->iteration }}</td>
-                    <td class="text-center">{{ $alt->code }}</td>
-                    <td>{{ $alt->nama_alternatif }}</td>
-                    <td class="text-center">
-                        <a href="{{ route('alternatif.edit', $alt->id) }}" class="btn btn-sm btn-warning me-1 shadow-sm">
-                            <i class="bi bi-pencil-square"></i>
-                        </a>
-                        <button type="button" class="btn btn-sm btn-danger shadow-sm" data-bs-toggle="modal" data-bs-target="#modalHapus{{ $alt->id }}">
-                            <i class="bi bi-trash3-fill"></i>
-                        </button>
-                    </td>
-                </tr>
+                @forelse($alternatifs as $alt)
+                    <tr class="border-t hover:bg-slate-50">
+                        <td class="px-6 py-4 text-center">{{ $loop->iteration }}</td>
+                        <td class="px-6 py-4 text-center">{{ $alt->code }}</td>
+                        <td class="px-6 py-4">{{ $alt->nama_alternatif }}</td>
+                        <td class="px-6 py-4 text-center space-x-2">
+                            <a href="{{ route('alternatif.edit', $alt->id) }}"
+                               class="inline-flex items-center gap-1 px-3 py-1 bg-yellow-400 hover:bg-yellow-500 text-white text-xs font-semibold rounded shadow transition">
+                                <i class="bi bi-pencil-fill"></i> Edit
+                            </a>
+                            <button type="button"
+                                    onclick="document.getElementById('modalHapus{{ $alt->id }}').showModal();"
+                                    class="inline-flex items-center gap-1 px-3 py-1 bg-red-600 hover:bg-red-700 text-white text-xs font-semibold rounded shadow transition">
+                                    <i class="bi bi-trash-fill"></i> Hapus
+                            </button>
+                        </td>
+                    </tr>
 
-                {{-- Modal Konfirmasi Hapus --}}
-                <div class="modal fade" id="modalHapus{{ $alt->id }}" tabindex="-1" aria-labelledby="modalLabel{{ $alt->id }}" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content shadow rounded-4">
-                            <div class="modal-header bg-danger text-white">
-                                <h5 class="modal-title" id="modalLabel{{ $alt->id }}">
+                    {{-- Modal konfirmasi --}}
+                    <dialog id="modalHapus{{ $alt->id }}" class="rounded-xl p-0 backdrop:bg-black/50 w-full max-w-md">
+                        <div class="bg-white rounded-xl shadow-lg">
+                            <div class="bg-red-600 text-white px-6 py-3 rounded-t-xl flex justify-between items-center">
+                                <h3 class="text-lg font-semibold">
                                     <i class="bi bi-exclamation-circle-fill me-2"></i> Konfirmasi Hapus
-                                </h5>
-                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                                </h3>
+                                <form method="dialog">
+                                    <button type="submit" class="text-white text-2xl leading-none">&times;</button>
+                                </form>
                             </div>
-                            <div class="modal-body">
-                                <p class="mb-0">Yakin ingin menghapus <strong>{{ $alt->nama_alternatif }}</strong>?</p>
+                            <div class="px-6 py-4">
+                                <p class="text-sm text-slate-700">
+                                    Yakin ingin menghapus <strong>{{ $alt->nama_alternatif }}</strong>?
+                                </p>
                             </div>
-                            <div class="modal-footer">
+                            <div class="px-6 py-4 flex justify-end gap-2 border-t">
                                 <form method="POST" action="{{ route('alternatif.destroy', $alt->id) }}">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-danger"><i class="bi bi-trash"></i> Hapus</button>
+                                    <button type="submit"
+                                            class="bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded transition">
+                                        <i class="bi bi-trash"></i> Hapus
+                                    </button>
                                 </form>
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                <form method="dialog">
+                                    <button class="bg-gray-200 hover:bg-gray-300 text-slate-700 font-semibold px-4 py-2 rounded transition">
+                                        Batal
+                                    </button>
+                                </form>
                             </div>
                         </div>
-                    </div>
-                </div>
-                @endforeach
+                    </dialog>
+                @empty
+                    <tr>
+                        <td colspan="4" class="px-6 py-4 text-center text-gray-500">Belum ada alternatif.</td>
+                    </tr>
+                @endforelse
             </tbody>
         </table>
     </div>
@@ -104,18 +126,23 @@
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const alert = document.getElementById('successAlert');
+        console.log("Script jalan, alert =", alert); // Tambahan log
+
         if (alert) {
             setTimeout(() => {
-                if (window.bootstrap && bootstrap.Alert) {
-                    const bsAlert = bootstrap.Alert.getOrCreateInstance(alert);
-                    bsAlert.close();
-                } else {
-                    alert.classList.remove('show');
-                    alert.classList.add('fade');
-                    setTimeout(() => alert.remove(), 300);
-                }
+                console.log("Success alert fade-out triggered");
+                alert.classList.add('animate-fade-out');
+                setTimeout(() => alert.remove(), 800);
             }, 5000);
+        } else {
+            console.log("Element #successAlert TIDAK ditemukan!");
         }
     });
 </script>
 @endpush
+
+
+
+
+
+

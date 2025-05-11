@@ -11,6 +11,8 @@ class KriteriaController extends Controller
 {
     public function index()
     {
+        if (!session('jenis_analisis_id')) {
+        return redirect()->route('jenis-analisis.index')->with('error', 'Silakan pilih jenis analisis terlebih dahulu.');}
         $jenis_analisis_id = session('jenis_analisis_id');
         $jenis_analisis = JenisAnalisis::find($jenis_analisis_id);
         $kriterias = Kriteria::where('jenis_analisis_id', session('jenis_analisis_id'))->get();

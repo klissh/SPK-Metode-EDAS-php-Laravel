@@ -1,88 +1,97 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container-fluid px-4">
-    <div class="mb-4">
-        <h4 class="fw-bold text-info">
-            <i class="bi bi-list-ul me-2"></i>Sub Kriteria untuk:
-            <span class="text-dark">{{ $kriteria->nama_kriteria }} ({{ $kriteria->code }})</span>
-        </h4>
+<div class="space-y-6">
+
+    {{-- Heading --}}
+    <div>
+        <h2 class="text-2xl font-semibold text-cyan-600 flex items-center gap-2">
+            <i class="bi bi-list-ul"></i>
+            Sub Kriteria untuk: <span class="text-slate-800">{{ $kriteria->nama_kriteria }} ({{ $kriteria->code }})</span>
+        </h2>
     </div>
 
     {{-- Notifikasi Sukses --}}
     @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert" id="successAlert">
-            <i class="bi bi-check-circle-fill me-2"></i>
-            {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Tutup"></button>
+        <div class="bg-emerald-100 border border-emerald-300 text-emerald-800 px-4 py-3 rounded relative shadow" id="successAlert">
+            <i class="bi bi-check-circle-fill me-2"></i> {{ session('success') }}
         </div>
     @endif
 
-    {{-- Tombol tambah --}}
-    <div class="mb-3 d-flex justify-content-between">
-        <a href="{{ route('sub-kriteria.create', ['kriteria_id' => $kriteria->id]) }}" class="btn btn-primary shadow-sm">
-            <i class="bi bi-plus-circle me-1"></i> Tambah Sub Kriteria
+    {{-- Tombol Aksi --}}
+    <div class="flex justify-between flex-wrap gap-3">
+        <a href="{{ route('sub-kriteria.create', ['kriteria_id' => $kriteria->id]) }}"
+           class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg shadow flex items-center gap-2 transition">
+            <i class="bi bi-plus-circle"></i> Tambah Sub Kriteria
         </a>
-        <a href="{{ route('kriteria.index') }}" class="btn btn-outline-secondary shadow-sm">
-            <i class="bi bi-arrow-left-circle me-1"></i> Kembali ke Kriteria
+        <a href="{{ route('kriteria.index') }}"
+           class="bg-gray-200 hover:bg-gray-300 text-slate-700 font-semibold px-6 py-2 rounded-lg shadow flex items-center gap-2 transition">
+            <i class="bi bi-arrow-left-circle"></i> Kembali ke Kriteria
         </a>
     </div>
 
     {{-- Tabel --}}
-    <div class="table-responsive rounded-3 shadow-sm">
-        <table class="table table-hover align-middle table-bordered mb-0 bg-white">
-            <thead class="table-info text-center">
+    <div class="overflow-x-auto bg-white rounded-lg shadow">
+        <table class="min-w-full text-sm text-left text-gray-600">
+            <thead class="bg-cyan-100 text-cyan-800 uppercase text-xs">
                 <tr>
-                    <th>No</th>
-                    <th>Nama Sub</th>
-                    <th>Nilai</th>
-                    <th>Aksi</th>
+                    <th class="px-6 py-3 text-center">No</th>
+                    <th class="px-6 py-3">Nama Sub</th>
+                    <th class="px-6 py-3 text-center">Nilai</th>
+                    <th class="px-6 py-3 text-center">Aksi</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($subkriterias as $sub)
-                    <tr>
-                        <td class="text-center">{{ $loop->iteration }}</td>
-                        <td>{{ $sub->nama_sub }}</td>
-                        <td class="text-center">{{ $sub->nilai }}</td>
-                        <td class="text-center">
-                            <button type="button" class="btn btn-sm btn-danger shadow-sm"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#modalHapus{{ $sub->id }}">
+                    <tr class="border-t hover:bg-slate-50">
+                        <td class="px-6 py-4 text-center">{{ $loop->iteration }}</td>
+                        <td class="px-6 py-4">{{ $sub->nama_sub }}</td>
+                        <td class="px-6 py-4 text-center">{{ $sub->nilai }}</td>
+                        <td class="px-6 py-4 text-center">
+                            <button type="button"
+                                    onclick="document.getElementById('modalHapus{{ $sub->id }}').showModal();"
+                                    class="inline-flex items-center justify-center bg-red-500 hover:bg-red-600 text-white rounded px-3 py-1 text-sm transition shadow">
                                 <i class="bi bi-trash3-fill"></i>
                             </button>
                         </td>
                     </tr>
 
                     {{-- Modal Konfirmasi Hapus --}}
-                    <div class="modal fade" id="modalHapus{{ $sub->id }}" tabindex="-1" aria-labelledby="modalLabel{{ $sub->id }}" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content shadow rounded-4">
-                                <div class="modal-header bg-danger text-white">
-                                    <h5 class="modal-title" id="modalLabel{{ $sub->id }}">
-                                        <i class="bi bi-exclamation-circle-fill me-2"></i> Konfirmasi Hapus
-                                    </h5>
-                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Tutup"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <p class="mb-0">Yakin ingin menghapus sub kriteria <strong>{{ $sub->nama_sub }}</strong>?</p>
-                                </div>
-                                <div class="modal-footer">
-                                    <form action="{{ route('sub-kriteria.destroy', $sub->id) }}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger">
-                                            <i class="bi bi-trash"></i> Hapus
-                                        </button>
-                                    </form>
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                                </div>
+                    <dialog id="modalHapus{{ $sub->id }}" class="rounded-xl p-0 backdrop:bg-black/50 w-full max-w-md">
+                        <div class="bg-white rounded-xl shadow-lg">
+                            <div class="bg-red-600 text-white px-6 py-3 rounded-t-xl flex justify-between items-center">
+                                <h3 class="text-lg font-semibold">
+                                    <i class="bi bi-exclamation-circle-fill me-2"></i> Konfirmasi Hapus
+                                </h3>
+                                <form method="dialog">
+                                    <button type="submit" class="text-white text-2xl leading-none">&times;</button>
+                                </form>
+                            </div>
+                            <div class="px-6 py-4">
+                                <p class="text-sm text-slate-700">
+                                    Yakin ingin menghapus sub kriteria <strong>{{ $sub->nama_sub }}</strong>?
+                                </p>
+                            </div>
+                            <div class="px-6 py-4 flex justify-end gap-2 border-t">
+                                <form method="POST" action="{{ route('sub-kriteria.destroy', $sub->id) }}">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit"
+                                            class="bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded transition">
+                                        <i class="bi bi-trash"></i> Hapus
+                                    </button>
+                                </form>
+                                <form method="dialog">
+                                    <button class="bg-gray-200 hover:bg-gray-300 text-slate-700 font-semibold px-4 py-2 rounded transition">
+                                        Batal
+                                    </button>
+                                </form>
                             </div>
                         </div>
-                    </div>
+                    </dialog>
                 @empty
                     <tr>
-                        <td colspan="4" class="text-center text-muted">Belum ada sub kriteria</td>
+                        <td colspan="4" class="text-center px-6 py-4 text-gray-500">Belum ada sub kriteria</td>
                     </tr>
                 @endforelse
             </tbody>
@@ -97,14 +106,7 @@
         const alert = document.getElementById('successAlert');
         if (alert) {
             setTimeout(() => {
-                if (window.bootstrap && bootstrap.Alert) {
-                    const bsAlert = bootstrap.Alert.getOrCreateInstance(alert);
-                    bsAlert.close();
-                } else {
-                    alert.classList.remove('show');
-                    alert.classList.add('fade');
-                    setTimeout(() => alert.remove(), 300);
-                }
+                alert.remove();
             }, 5000);
         }
     });

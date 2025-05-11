@@ -13,6 +13,8 @@ class NilaiAlternatifController extends Controller
     // ✅ Tampilkan form input nilai alternatif
     public function index()
     {
+        if (!session('jenis_analisis_id')) {
+        return redirect()->route('jenis-analisis.index')->with('error', 'Silakan pilih jenis analisis terlebih dahulu.');}
         $jenis_analisis_id = session('jenis_analisis_id');
         $jenis_analisis = JenisAnalisis::find($jenis_analisis_id);
         $jenisAnalisisId = session('jenis_analisis_id');

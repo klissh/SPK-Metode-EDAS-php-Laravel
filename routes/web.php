@@ -16,7 +16,7 @@ Route::get('/', function () {
 
 // ✅ Dashboard: redirect ke pemilihan jenis analisis
 Route::get('/dashboard', function () {
-    return redirect()->route('pilih-jenis-analisis');
+    return redirect()->route('jenis-analisis.index');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 // ✅ Semua route ini hanya bisa diakses setelah login
@@ -31,7 +31,6 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('/jenis-analisis', JenisAnalisisController::class);
 
     // ✅ Pemilihan Jenis Analisis
-    Route::get('/pilih-jenis-analisis', [JenisAnalisisController::class, 'pilih'])->name('pilih-jenis-analisis');
     Route::post('/set-jenis-analisis', [JenisAnalisisController::class, 'set'])->name('set-jenis-analisis');
 
     // ✅ Kriteria

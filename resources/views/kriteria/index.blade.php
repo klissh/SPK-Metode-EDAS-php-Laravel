@@ -1,109 +1,125 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container-fluid px-4">
-    <div class="mb-4">
-        <h4 class="fw-bold text-primary">
-            <i class="bi bi-sliders2-vertical me-2"></i>Data Kriteria
-        </h4>
-        <p class="text-muted">
+<div class="space-y-6">
+
+    {{-- Heading --}}
+    <div>
+        <h2 class="text-2xl font-semibold text-blue-600 flex items-center gap-2">
+            <i class="bi bi-sliders2-vertical"></i> Data Kriteria
+        </h2>
+        <p class="text-gray-600 mt-1">
             Jenis Analisis:
-            <strong>({{ $jenis_analisis->nama ?? '' }})</strong>
-            
+            <span class="ml-2 inline-block text-sm font-bold text-blue-700 bg-blue-100 px-3 py-1 rounded-xl shadow"> ({{ $jenis_analisis->nama ?? '' }}) </span>
         </p>
     </div>
 
     {{-- Notifikasi Sukses --}}
     @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert" id="successAlert">
+        <div id="successAlert"
+             class="bg-blue-100 border border-blue-300 text-blue-800 px-4 py-3 rounded shadow relative transition-opacity duration-700"
+             role="alert">
             <i class="bi bi-check-circle-fill me-2"></i>
             <strong>Berhasil!</strong> {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Tutup"></button>
         </div>
     @endif
 
     {{-- Notifikasi Error --}}
     @if($errors->any())
-        <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
+        <div class="bg-red-100 border border-red-300 text-red-800 px-4 py-3 rounded shadow relative">
             <i class="bi bi-exclamation-triangle-fill me-2"></i>
             <strong>Terjadi kesalahan:</strong>
-            <ul class="mb-0 mt-2">
+            <ul class="list-disc pl-6 mt-2 text-sm">
                 @foreach($errors->all() as $error)
                     <li>{{ $error }}</li>
                 @endforeach
             </ul>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Tutup"></button>
         </div>
     @endif
 
     {{-- Tombol Aksi --}}
-    <div class="mb-3 d-flex justify-content-between">
-        <a href="{{ route('kriteria.create') }}" class="btn btn-primary shadow-sm">
-            <i class="bi bi-plus-circle me-1"></i> Tambah Kriteria
+    <div class="flex justify-between flex-wrap gap-3">
+        <a href="{{ route('kriteria.create') }}"
+           class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded-lg shadow flex items-center gap-2 transition">
+            <i class="bi bi-plus-circle"></i> Tambah Kriteria
         </a>
-        <a href="{{ route('jenis-analisis.index') }}" class="btn btn-outline-secondary shadow-sm">
-            <i class="bi bi-arrow-left-circle me-1"></i> Kembali ke Jenis Analisis
+        <a href="{{ route('jenis-analisis.index') }}"
+           class="bg-gray-200 hover:bg-gray-300 text-slate-800 font-semibold px-4 py-2 rounded-lg shadow flex items-center gap-2 transition">
+            <i class="bi bi-arrow-left-circle"></i> Kembali ke Jenis Analisis
         </a>
     </div>
 
-    <div class="table-responsive rounded-3 shadow-sm">
-        <table class="table table-hover align-middle table-bordered mb-0 bg-white">
-            <thead class="table-primary text-center">
+    {{-- Tabel --}}
+    <div class="overflow-x-auto bg-white shadow rounded-lg">
+        <table class="min-w-full text-sm text-left text-slate-600">
+            <thead class="bg-blue-100 text-blue-700 uppercase text-xs text-center">
                 <tr>
-                    <th>No</th>
-                    <th>Kode</th>
-                    <th>Nama Kriteria</th>
-                    <th>Tipe</th>
-                    <th>Bobot</th>
-                    <th>Aksi</th>
+                    <th class="px-4 py-3">No</th>
+                    <th class="px-4 py-3">Kode</th>
+                    <th class="px-4 py-3 text-left">Nama Kriteria</th>
+                    <th class="px-4 py-3">Tipe</th>
+                    <th class="px-4 py-3">Bobot</th>
+                    <th class="px-4 py-3">Aksi</th>
                 </tr>
             </thead>
             <tbody>
-            @foreach($kriterias as $kriteria)
-                <tr>
-                    <td class="text-center">{{ $loop->iteration }}</td>
-                    <td class="text-center">{{ $kriteria->code }}</td>
-                    <td>{{ $kriteria->nama_kriteria }}</td>
-                    <td class="text-center">{{ ucfirst($kriteria->tipe) }}</td>
-                    <td class="text-center">{{ $kriteria->bobot * 100 }}%</td>
-                    <td class="text-center">
-                        <a href="{{ route('sub-kriteria.index', ['kriteria_id' => $kriteria->id]) }}" class="btn btn-info btn-sm me-1 shadow-sm">
-                            <i class="bi bi-list-ul"></i>
+                @foreach($kriterias as $kriteria)
+                <tr class="border-t hover:bg-slate-50 text-center">
+                    <td class="px-4 py-3">{{ $loop->iteration }}</td>
+                    <td class="px-4 py-3">{{ $kriteria->code }}</td>
+                    <td class="px-4 py-3 text-left">{{ $kriteria->nama_kriteria }}</td>
+                    <td class="px-4 py-3">{{ ucfirst($kriteria->tipe) }}</td>
+                    <td class="px-4 py-3">{{ $kriteria->bobot * 100 }}%</td>
+                    <td class="px-4 py-3 space-x-1">
+                        <a href="{{ route('sub-kriteria.index', ['kriteria_id' => $kriteria->id]) }}"
+                           class="inline-flex items-center gap-1 px-3 py-1 bg-sky-500 hover:bg-sky-600 text-white text-xs font-semibold rounded shadow transition">
+                                <i class="bi bi-pencil-fill"></i> Sub_Kriteria
                         </a>
-                        <a href="{{ route('kriteria.edit', $kriteria->id) }}" class="btn btn-warning btn-sm me-1 shadow-sm">
-                            <i class="bi bi-pencil-square"></i>
+                        <a href="{{ route('kriteria.edit', $kriteria->id) }}"
+                           class="inline-flex items-center gap-1 px-3 py-1 bg-yellow-400 hover:bg-yellow-500 text-white text-xs font-semibold rounded shadow transition">
+                                <i class="bi bi-pencil-fill"></i> Edit
                         </a>
-                        <button type="button" class="btn btn-danger btn-sm shadow-sm" data-bs-toggle="modal" data-bs-target="#modalHapus{{ $kriteria->id }}">
-                            <i class="bi bi-trash3-fill"></i>
+                        <button onclick="document.getElementById('modalHapus{{ $kriteria->id }}').showModal();"
+                                class="inline-flex items-center gap-1 px-3 py-1 bg-red-600 hover:bg-red-700 text-white text-xs font-semibold rounded shadow transition">
+                                <i class="bi bi-trash-fill"></i> Hapus
                         </button>
                     </td>
                 </tr>
 
                 {{-- Modal Konfirmasi Hapus --}}
-                <div class="modal fade" id="modalHapus{{ $kriteria->id }}" tabindex="-1" aria-labelledby="modalLabel{{ $kriteria->id }}" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content shadow rounded-4">
-                            <div class="modal-header bg-danger text-white">
-                                <h5 class="modal-title" id="modalLabel{{ $kriteria->id }}">
-                                    <i class="bi bi-exclamation-circle-fill me-2"></i> Konfirmasi Hapus
-                                </h5>
-                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Tutup"></button>
-                            </div>
-                            <div class="modal-body">
-                                <p class="mb-0">Yakin ingin menghapus kriteria <strong>{{ $kriteria->nama_kriteria }}</strong>?</p>
-                            </div>
-                            <div class="modal-footer">
-                                <form action="{{ route('kriteria.destroy', $kriteria->id) }}" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger"><i class="bi bi-trash"></i> Hapus</button>
-                                </form>
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                            </div>
+                <dialog id="modalHapus{{ $kriteria->id }}" class="rounded-xl p-0 backdrop:bg-black/50 w-full max-w-md">
+                    <div class="bg-white rounded-xl shadow-lg">
+                        <div class="bg-red-600 text-white px-6 py-3 rounded-t-xl flex justify-between items-center">
+                            <h3 class="text-lg font-semibold flex items-center gap-2">
+                                <i class="bi bi-exclamation-circle-fill"></i> Konfirmasi Hapus
+                            </h3>
+                            <form method="dialog">
+                                <button type="submit" class="text-white text-2xl leading-none">&times;</button>
+                            </form>
+                        </div>
+                        <div class="px-6 py-4">
+                            <p class="text-sm text-slate-700">
+                                Yakin ingin menghapus kriteria <strong>{{ $kriteria->nama_kriteria }}</strong>?
+                            </p>
+                        </div>
+                        <div class="px-6 py-4 flex justify-end gap-2 border-t">
+                            <form action="{{ route('kriteria.destroy', $kriteria->id) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit"
+                                        class="bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded transition">
+                                    <i class="bi bi-trash"></i> Hapus
+                                </button>
+                            </form>
+                            <form method="dialog">
+                                <button class="bg-gray-200 hover:bg-gray-300 text-slate-700 font-semibold px-4 py-2 rounded transition">
+                                    Batal
+                                </button>
+                            </form>
                         </div>
                     </div>
-                </div>
-            @endforeach
+                </dialog>
+                @endforeach
             </tbody>
         </table>
     </div>
@@ -116,14 +132,8 @@
         const alert = document.getElementById('successAlert');
         if (alert) {
             setTimeout(() => {
-                if (window.bootstrap && bootstrap.Alert) {
-                    const bsAlert = bootstrap.Alert.getOrCreateInstance(alert);
-                    bsAlert.close();
-                } else {
-                    alert.classList.remove('show');
-                    alert.classList.add('fade');
-                    setTimeout(() => alert.remove(), 300);
-                }
+                alert.classList.add('opacity-0');
+                setTimeout(() => alert.remove(), 700);
             }, 5000);
         }
     });

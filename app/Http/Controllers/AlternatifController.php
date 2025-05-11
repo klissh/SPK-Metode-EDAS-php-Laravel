@@ -11,10 +11,14 @@ class AlternatifController extends Controller
 {
     public function index()
     {
+        if (!session('jenis_analisis_id')) {
+        return redirect()->route('jenis-analisis.index')->with('error', 'Silakan pilih jenis analisis terlebih dahulu.');}
         $jenis_analisis_id = session('jenis_analisis_id');
         $jenis_analisis = JenisAnalisis::find($jenis_analisis_id); // pastikan pakai model yang sesuai
         $alternatifs = Alternatif::where('jenis_analisis_id', session('jenis_analisis_id'))->get();
         return view('alternatif.index', compact('alternatifs', 'jenis_analisis'));
+
+        
     }
 
     public function create()

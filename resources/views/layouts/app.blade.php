@@ -6,129 +6,98 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    
-    <!-- Bootstrap CSS & Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- ✅ Tambahkan ini untuk Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-
-    <style>
-        body {
-            background: linear-gradient(135deg, #ecf0f3, #f5f7fa);
-            font-family: 'Segoe UI', sans-serif;
-        }
-        .sidebar {
-            height: 100vh;
-            width: 260px;
-            position: fixed;
-            background: linear-gradient(160deg, #2c3e50, #34495e);
-            box-shadow: 3px 0 10px rgba(0, 0, 0, 0.2);
-            padding: 30px 0;
-            display: flex;
-            flex-direction: column;
-        }
-        .sidebar h4 {
-            color: #f1f1f1;
-            font-weight: bold;
-            text-align: center;
-            margin-bottom: 40px;
-            font-size: 1.6rem;
-        }
-        .sidebar a {
-            color: #bdc3c7;
-            padding: 12px 30px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 15px;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-        .sidebar a:hover,
-        .sidebar a.active {
-            background: rgba(255, 255, 255, 0.1);
-            color: #1ABC9C;
-            font-weight: bold;
-            border-left: 4px solid #1ABC9C;
-        }
-        .sidebar .btn-new-analysis {
-            background: linear-gradient(135deg, #8e44ad, #9b59b6);
-            color: white;
-            font-weight: 600;
-            text-align: center;
-            margin: 30px 30px 0;
-            border-radius: 10px;
-            padding: 12px;
-            display: block;
-            text-decoration: none;
-            transition: background 0.3s ease;
-        }
-        .sidebar .btn-new-analysis:hover {
-            background: #8e44ad;
-        }
-        .content {
-            margin-left: 260px;
-            padding: 30px;
-        }
-        .logout-button {
-            margin: 20px 30px 0;
-            border-radius: 10px;
-            padding: 10px;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-        .logout-button:hover {
-            background-color: #e74c3c;
-            color: white;
-        }
-    </style>
 </head>
-<body>
-    <div class="d-flex">
+<body class="font-sans bg-gradient-to-r from-gray-100 to-gray-200 min-h-screen">
+
+    <div class="flex min-h-screen">
         <!-- Sidebar -->
-        <div class="sidebar">
-            <h4><i class="bi bi-graph-up"></i> SPK EDAS</h4>
+        <aside class="w-64 h-screen fixed bg-gradient-to-b from-slate-800 to-slate-900 shadow-xl">
+            <div class="flex flex-col h-full">
+                <div class="px-6 py-8">
+                    <h1 class="text-2xl font-bold text-white flex items-center gap-2 hover:scale-105 transition-all">
+                        <svg class="w-7 h-7 text-emerald-400" xmlns="http://www.w3.org/2000/svg" fill="none"
+                             viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                        </svg>
+                        SPK EDAS
+                    </h1>
+                </div>
 
-            <a href="{{ route('alternatif.index') }}" class="{{ request()->is('alternatif*') ? 'active' : '' }}">
-                <i class="bi bi-calculator-fill"></i>
-                Data Alternatif
-            </a>
-            <a href="{{ route('kriteria.index') }}" class="{{ request()->is('kriteria*') ? 'active' : '' }}">
-                <i class="bi bi-sliders2-vertical"></i>
-                Data Kriteria
-            </a>
-            <a href="{{ route('nilai.index') }}" class="{{ request()->is('nilai-alternatif*') ? 'active' : '' }}">
-                <i class="bi bi-pencil-square"></i>
-                Nilai Alternatif
-            </a>
-            <a href="{{ route('edas.index') }}" class="{{ request()->is('perhitungan') ? 'active' : '' }}">
-                <i class="bi bi-bar-chart-fill"></i>
-                Hasil Perhitungan
-            </a>
+                <!-- Navigation -->
+                <nav class="flex-grow px-4 pb-4">
+                    <ul class="space-y-1">
+                        <li>
+                            <a href="{{ route('alternatif.index') }}"
+                               class="flex items-center gap-3 px-4 py-3 rounded-lg transition hover:bg-slate-700/50 hover:text-emerald-400 hover:translate-x-1 group {{ request()->is('alternatif*') ? 'text-emerald-400 bg-slate-700/50' : 'text-gray-300' }}">
+                                <span class="bg-slate-700/30 p-2 rounded-lg group-hover:bg-emerald-400/20">
+                                    <i class="bi bi-calculator-fill"></i>
+                                </span>
+                                Data Alternatif
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('kriteria.index') }}"
+                               class="flex items-center gap-3 px-4 py-3 rounded-lg transition hover:bg-slate-700/50 hover:text-emerald-400 hover:translate-x-1 group {{ request()->is('kriteria*') ? 'text-emerald-400 bg-slate-700/50' : 'text-gray-300' }}">
+                                <span class="bg-slate-700/30 p-2 rounded-lg group-hover:bg-emerald-400/20">
+                                    <i class="bi bi-sliders2-vertical"></i>
+                                </span>
+                                Data Kriteria
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('nilai.index') }}"
+                               class="flex items-center gap-3 px-4 py-3 rounded-lg transition hover:bg-slate-700/50 hover:text-emerald-400 hover:translate-x-1 group {{ request()->is('nilai-alternatif*') ? 'text-emerald-400 bg-slate-700/50' : 'text-gray-300' }}">
+                                <span class="bg-slate-700/30 p-2 rounded-lg group-hover:bg-emerald-400/20">
+                                    <i class="bi bi-pencil-square"></i>
+                                </span>
+                                Nilai Alternatif
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('edas.index') }}"
+                               class="flex items-center gap-3 px-4 py-3 rounded-lg transition hover:bg-slate-700/50 hover:text-emerald-400 hover:translate-x-1 group {{ request()->is('perhitungan') ? 'text-emerald-400 bg-slate-700/50' : 'text-gray-300' }}">
+                                <span class="bg-slate-700/30 p-2 rounded-lg group-hover:bg-emerald-400/20">
+                                    <i class="bi bi-bar-chart-fill"></i>
+                                </span>
+                                Hasil Perhitungan
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
 
-            <!-- Tombol Aksi -->
-            <a href="{{ route('pilih-jenis-analisis') }}"
-               class="w-75 mx-auto d-flex align-items-center justify-content-center gap-2 fw-semibold mt-4 py-2 px-4 rounded-3 text-white bg-success bg-gradient text-decoration-none transition">
-               <i class="bi bi-plus-circle"></i> Pilih Analisis
-            </a>
-
-            <!-- Logout -->
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-                <button type="submit"
-                  class="btn btn-danger w-75 mx-auto d-flex align-items-center justify-content-center gap-2 fw-semibold mt-3 py-2 px-4 rounded-3 transition">
-                  <i class="bi bi-box-arrow-right"></i> Logout
-                </button>
-            </form>
-        </div>
+                <!-- Bottom Buttons -->
+                <div class="px-4 mb-6 space-y-4">
+                    <a href="{{ route('jenis-analisis.index') }}"
+                       class="flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-500 to-teal-600 text-white py-3 px-4 rounded-lg shadow-lg hover:shadow-emerald-500/30 hover:-translate-y-1 transition">
+                        <i class="bi bi-plus-circle-fill"></i>
+                        Pilih Analisis
+                    </a>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit"
+                                class="flex w-full items-center justify-center gap-2 bg-gradient-to-r from-rose-500 to-red-600 text-white py-3 px-4 rounded-lg shadow-lg hover:shadow-rose-500/30 hover:-translate-y-1 transition">
+                            <i class="bi bi-box-arrow-right"></i>
+                            Logout
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </aside>
 
         <!-- Konten -->
-        <div class="content w-100">
-            @yield('content')
-        </div>
+        <main class="ml-64 flex-1 p-8 transition-all duration-300">
+            <div class="bg-white rounded-xl shadow-md p-6 min-h-[80vh]">
+                @yield('content')
+            </div>
+        </main>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    @stack('scripts')
-
+@stack('scripts')
 </body>
 </html>
