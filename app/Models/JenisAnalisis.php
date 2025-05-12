@@ -9,9 +9,15 @@ class JenisAnalisis extends Model
 {
     use HasFactory;
 
-    // ✅ Spesifikasikan nama tabel secara eksplisit
+    // ✅ Nama tabel
     protected $table = 'jenis_analisis';
 
-    // ✅ Tentukan kolom yang bisa diisi secara massal (mass assignment)
-    protected $fillable = ['nama'];
+    // ✅ Kolom yang boleh diisi secara massal
+    protected $fillable = ['nama', 'user_id'];
+
+    // ✅ Relasi ke model User
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

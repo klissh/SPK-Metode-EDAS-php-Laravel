@@ -75,16 +75,20 @@
                 <!-- Bottom Buttons -->
                 <div class="px-4 mb-6 space-y-4">
                     <a href="{{ route('jenis-analisis.index') }}"
-                       class="flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-500 to-teal-600 text-white py-3 px-4 rounded-lg shadow-lg hover:shadow-emerald-500/30 hover:-translate-y-1 transition">
-                        <i class="bi bi-plus-circle-fill"></i>
-                        Pilih Analisis
+                       class="group relative inline-block w-full text-sm font-medium text-emerald-600 focus:ring-3 focus:outline-none">
+                       <span class="absolute inset-0 flex items-center justify-center gap-2 rounded-md border border-current bg-gradient-to-b from-slate-800 to-slate-900 text-emerald-500">
+                        <i class="bi bi-plus-circle-fill"></i> Pilih Analisis</span>
+                       <span class="relative z-10 flex items-center justify-center gap-2 border border-current bg-slate-800 px-12 py-3 rounded-md transition-all duration-200 group-hover:-translate-x-1 group-hover:-translate-y-1 group-hover:bg-white group-hover:text-emerald-600">
+                         <i class="bi bi-plus-circle-fill"></i> Pilih Analisis</span>
                     </a>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button type="submit"
-                                class="flex w-full items-center justify-center gap-2 bg-gradient-to-r from-rose-500 to-red-600 text-white py-3 px-4 rounded-lg shadow-lg hover:shadow-rose-500/30 hover:-translate-y-1 transition">
-                            <i class="bi bi-box-arrow-right"></i>
-                            Logout
+                          class="group relative inline-block w-full text-sm font-medium text-rose-600 focus:ring-3 focus:outline-none">
+                          <span class="absolute inset-0 flex items-center justify-center gap-2 rounded-md border border-current bg-gradient-to-b from-slate-800 to-slate-900 text-rose-500">
+                           <i class="bi bi-box-arrow-right"></i> Logout</span>
+                          <span class="relative z-10 flex items-center justify-center gap-2 border border-current bg-slate-800 px-12 py-3 rounded-md transition-all duration-200 group-hover:-translate-x-1 group-hover:-translate-y-1 group-hover:bg-white group-hover:text-rose-600">
+                           <i class="bi bi-box-arrow-right"></i> Logout</span>
                         </button>
                     </form>
                 </div>

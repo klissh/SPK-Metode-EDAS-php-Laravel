@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\JenisAnalisis;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class JenisAnalisisController extends Controller
 {
-    // ✅ Tampilkan semua data jenis analisis
+    // ✅ Tampilkan semua data jenis analisis milik user yang login
     public function index()
     {
-        $data = JenisAnalisis::all();
+        $data = JenisAnalisis::where('user_id', Auth::id())->get();
         return view('jenis_analisis.index', compact('data'));
     }
 
@@ -20,27 +21,30 @@ class JenisAnalisisController extends Controller
         return view('jenis_analisis.create');
     }
 
-    // ✅ Simpan jenis analisis baru
+    // ✅ Simpan jenis analisis baru milik user yang login
     public function store(Request $request)
     {
         $request->validate([
             'nama' => 'required|string|max:255',
         ]);
 
-        JenisAnalisis::create($request->only('nama'));
+        JenisAnalisis::create([
+            'nama' => $request->nama,
+            'user_id' => Auth::id(), // Simpan ID user yang login
+        ]);
 
         return redirect()->route('jenis-analisis.index')->with('success', 'Jenis analisis berhasil ditambahkan!');
     }
 
     // ✅ Tampilkan form edit jenis analisis
-    public function edit(JenisAnalisis $jenisAnalisi) // perhatikan: route binding pakai singular jenisAnalisi
+    public function edit(JenisAnalisis $jenisAnalisi)
     {
         return view('jenis_analisis.edit', [
             'jenisAnalisis' => $jenisAnalisi
         ]);
     }
 
-    // ✅ Update jenis analisis
+    // ✅ Update jenis analisis (hanya nama yang boleh diubah)
     public function update(Request $request, JenisAnalisis $jenisAnalisi)
     {
         $request->validate([
@@ -60,10 +64,10 @@ class JenisAnalisisController extends Controller
         return redirect()->route('jenis-analisis.index')->with('success', 'Jenis analisis berhasil dihapus!');
     }
 
-    // ✅ Tampilkan form pemilihan jenis analisis
+    // ✅ Tampilkan form pemilihan jenis analisis (hanya yang milik user)
     public function pilih()
     {
-        $data = JenisAnalisis::all();
+        $data = JenisAnalisis::where('user_id', Auth::id())->get();
         return view('jenis_analisis.pilih', compact('data'));
     }
 
