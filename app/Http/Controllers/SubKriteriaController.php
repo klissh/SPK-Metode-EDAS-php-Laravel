@@ -31,7 +31,7 @@ class SubKriteriaController extends Controller
         $request->validate([
             'kriteria_id' => 'required|exists:kriterias,id',
             'nama_sub' => 'required|string|max:255',
-            'nilai' => 'required|integer|min:1|max:5',
+            'nilai' => 'required|integer|min:1',
         ]);
 
         SubKriteria::create([

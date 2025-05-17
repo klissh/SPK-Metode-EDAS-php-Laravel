@@ -32,8 +32,8 @@
 
             {{-- Nilai --}}
             <div class="mb-6">
-                <label for="nilai" class="block text-sm font-semibold text-slate-700 mb-2">Nilai (1–5)</label>
-                <input type="number" name="nilai" min="1" max="5"
+                <label for="nilai" class="block text-sm font-semibold text-slate-700 mb-2">Nilai </label>
+                <input type="number" name="nilai" min="1"
                        class="w-full px-4 py-3 rounded-lg border border-slate-300 shadow-sm focus:ring-2 focus:ring-blue-400 focus:outline-none"
                        value="{{ old('nilai', $subkriteria->nilai ?? '') }}" required>
                 @error('nilai')
