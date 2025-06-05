@@ -71,10 +71,6 @@
                     <td class="px-4 py-3">{{ ucfirst($kriteria->tipe) }}</td>
                     <td class="px-4 py-3">{{ $kriteria->bobot * 100 }}%</td>
                     <td class="px-4 py-3 space-x-1">
-                        <a href="{{ route('sub-kriteria.index', ['kriteria_id' => $kriteria->id]) }}"
-                           class="inline-flex items-center gap-1 px-3 py-1 bg-sky-500 hover:bg-sky-600 text-white text-xs font-semibold rounded shadow transition">
-                                <i class="bi bi-pencil-fill"></i> Sub_Kriteria
-                        </a>
                         <a href="{{ route('kriteria.edit', $kriteria->id) }}"
                            class="inline-flex items-center gap-1 px-3 py-1 bg-yellow-400 hover:bg-yellow-500 text-white text-xs font-semibold rounded shadow transition">
                                 <i class="bi bi-pencil-fill"></i> Edit

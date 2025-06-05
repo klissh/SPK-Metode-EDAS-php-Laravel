@@ -44,20 +44,22 @@
                             <td class="px-4 py-3">{{ $i + 1 }}</td>
                             <td class="px-4 py-3 text-left">{{ $alt->nama_alternatif }}</td>
                             @foreach ($kriterias as $kriteria)
+                                @php
+                                    $value = old("nilai.{$alt->id}.{$kriteria->id}", $nilai_terisi[$alt->id][$kriteria->id][0]->nilai ?? '');
+                                @endphp
                                 <td class="px-4 py-2">
-                                    <select name="nilai[{{ $alt->id }}][{{ $kriteria->id }}]"
-                                            class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm shadow-sm focus:ring-2 focus:ring-blue-400 focus:outline-none"
-                                            required>
-                                        <option disabled {{ !isset($nilai_terisi[$alt->id][$kriteria->id]) ? 'selected' : '' }}>
-                                            -- Pilih --
-                                        </option>
-                                        @foreach ($kriteria->subKriterias as $sub)
-                                            <option value="{{ $sub->id }}"
-                                                {{ (isset($nilai_terisi[$alt->id][$kriteria->id]) && $nilai_terisi[$alt->id][$kriteria->id][0]->sub_kriteria_id == $sub->id) ? 'selected' : '' }}>
-                                                {{ $sub->nama_sub }} ({{ $sub->nilai }})
-                                            </option>
-                                        @endforeach
-                                    </select>
+                                    <input
+                                        type="number"
+                                        name="nilai[{{ $alt->id }}][{{ $kriteria->id }}]"
+                                        value="{{ $value }}"
+                                        step="0.01"
+                                        min="0"
+                                        max="100"
+                                        class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm shadow-sm focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                                    >
+                                    @error("nilai.{$alt->id}.{$kriteria->id}")
+                                        <div class="text-red-500 text-xs mt-1">{{ $message }}</div>
+                                    @enderror
                                 </td>
                             @endforeach
                         </tr>
@@ -85,17 +87,20 @@
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const alert = document.getElementById('successAlert');
-        console.log("Script jalan, alert =", alert); // Tambahan log
-
         if (alert) {
             setTimeout(() => {
-                console.log("Success alert fade-out triggered");
                 alert.classList.add('animate-fade-out');
                 setTimeout(() => alert.remove(), 800);
             }, 5000);
-        } else {
-            console.log("Element #successAlert TIDAK ditemukan!");
         }
     });
 </script>
+@if(session('debug_console'))
+    <script>
+        console.log("=== DEBUG NILAI YANG DIKIRIM ===");
+        @foreach(session('debug_console') as $log)
+            console.log(@json($log));
+        @endforeach
+    </script>
+@endif
 @endpush

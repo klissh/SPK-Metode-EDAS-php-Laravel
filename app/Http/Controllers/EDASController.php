@@ -6,40 +6,34 @@ use App\Models\Kriteria;
 use App\Models\Alternatif;
 use App\Models\NilaiAlternatif;
 use App\Models\JenisAnalisis;
-use App\Models\SubKriteria;
 
 class EDASController extends Controller
 {
     public function index()
     {
         if (!session('jenis_analisis_id')) {
-        return redirect()->route('jenis-analisis.index')->with('error', 'Silakan pilih jenis analisis terlebih dahulu.');}
-        
+            return redirect()->route('jenis-analisis.index')->with('error', 'Silakan pilih jenis analisis terlebih dahulu.');
+        }
+
         $jenisAnalisisId = session('jenis_analisis_id');
-        $jenis_analisis_id = session('jenis_analisis_id');
-        $jenis_analisis = JenisAnalisis::find($jenis_analisis_id); // pastikan pakai model yang sesuai
+        $jenis_analisis = JenisAnalisis::find($jenisAnalisisId);
 
         $kriterias = Kriteria::where('jenis_analisis_id', $jenisAnalisisId)->get();
         $alternatifs = Alternatif::where('jenis_analisis_id', $jenisAnalisisId)->get();
 
-        // Gunakan kode sebagai key utama
+        // Ambil nilai langsung dari tabel nilai_alternatifs
         $data = [];
         foreach ($alternatifs as $alt) {
             foreach ($kriterias as $kri) {
                 $nilai = NilaiAlternatif::where('alternatif_id', $alt->id)
                     ->where('kriteria_id', $kri->id)
-                    ->first();
+                    ->value('nilai');
 
-                if ($nilai) {
-                    $sub = SubKriteria::find($nilai->sub_kriteria_id);
-                    $data[$alt->code][$kri->code] = $sub?->nilai ?? 0;
-                } else {
-                    $data[$alt->code][$kri->code] = 0;
-                }
+                $data[$alt->code][$kri->code] = $nilai ?? 0;
             }
         }
 
-        // Hitung rata-rata
+        // Hitung rata-rata per kriteria
         $rata2 = [];
         foreach ($kriterias as $kri) {
             $total = 0;
@@ -49,7 +43,7 @@ class EDASController extends Controller
             $rata2[$kri->code] = count($alternatifs) ? $total / count($alternatifs) : 0;
         }
 
-        // Hitung PDA dan NDA
+        // Hitung PDA & NDA
         $pda = $nda = [];
         foreach ($alternatifs as $alt) {
             foreach ($kriterias as $kri) {
@@ -87,7 +81,7 @@ class EDASController extends Controller
             $SN[$alt->code] = $totalBobot ? $sumNDA / $totalBobot : 0;
         }
 
-        // Hitung NSP, NSN, AS
+        // Hitung NSP, NSN, dan AS
         $maxSP = max($SP) ?: 1;
         $maxSN = max($SN) ?: 1;
         $NSP = $NSN = $AS = [];
@@ -99,7 +93,7 @@ class EDASController extends Controller
             $AS[$code] = 0.5 * ($NSP[$code] + $NSN[$code]);
         }
 
-        // Ranking
+        // Hitung Ranking
         $ranking = [];
         foreach ($AS as $code => $nilai) {
             $alt = $alternatifs->firstWhere('code', $code);
@@ -109,6 +103,7 @@ class EDASController extends Controller
                 'as' => $nilai
             ];
         }
+
         usort($ranking, fn($a, $b) => $b['as'] <=> $a['as']);
 
         return view('edas.index', compact(

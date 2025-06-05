@@ -9,7 +9,7 @@ class NilaiAlternatif extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['alternatif_id', 'kriteria_id', 'sub_kriteria_id'];
+    protected $fillable = ['alternatif_id', 'kriteria_id', 'nilai'];
 
     public function alternatif()
     {
