@@ -45,7 +45,7 @@
                     <a href="{{ url('/') }}" class="hover:text-blue-600 dark:hover:text-blue-400 transition">Beranda</a>
                 @endif
                 @if (session('jenis_analisis_id'))
-                    <a href="{{ route('user.perhitungan', session('jenis_analisis_id')) }}" class="hover:text-blue-600 dark:hover:text-blue-400 transition">Perhitungan</a>
+                    <a href="{{ route('user.perhitungan', session('jenis_analisis_id')) }}" class="hover:text-blue-600 dark:hover:text-blue-400 transition">Nilai_Alternatif</a>
                     <a href="{{ route('user.ranking', session('jenis_analisis_id')) }}" class="hover:text-blue-600 dark:hover:text-blue-400 transition">Ranking</a>
                 @endif
             </div>
@@ -63,7 +63,7 @@
                 <a href="{{ url('/') }}" class="block py-2 hover:text-blue-600">Beranda</a>
             @endif
             @if (session('jenis_analisis_id'))
-                <a href="{{ route('user.perhitungan', session('jenis_analisis_id')) }}" class="block py-2 hover:text-blue-600">Perhitungan</a>
+                <a href="{{ route('user.perhitungan', session('jenis_analisis_id')) }}" class="block py-2 hover:text-blue-600">Nilai_Alternatif</a>
                 <a href="{{ route('user.ranking', session('jenis_analisis_id')) }}" class="block py-2 hover:text-blue-600">Ranking</a>
             @endif
         </div>

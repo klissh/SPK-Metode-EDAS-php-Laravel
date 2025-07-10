@@ -35,10 +35,10 @@
                             class="w-full pl-10 px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 focus:outline-none transition-all duration-200"
                             value="{{ old('code', $alternatif->code ?? '') }}"
                             placeholder="Masukkan kode alternatif"
-                            {{ isset($alternatif) ? 'readonly' : '' }} required>
+                            {{ isset($alternatif) ? '' : 'readonly' }} required>
                     </div>
                     @if(isset($alternatif))
-                        <p class="mt-1 text-xs text-gray-500">Kode tidak dapat diubah setelah dibuat</p>
+                        <p class="mt-1 text-xs text-gray-500">Kode dapat diubah pada saat mengedit alternatif</p>
                     @endif
                 </div>
 

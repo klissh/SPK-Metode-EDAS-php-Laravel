@@ -35,10 +35,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('/kriteria', KriteriaController::class);
 
     // ✅ Sub-Kriteria
-    Route::get('/sub-kriteria/{kriteria_id}', [SubKriteriaController::class, 'index'])->name('sub-kriteria.index');
-    Route::get('/sub-kriteria/{kriteria_id}/create', [SubKriteriaController::class, 'create'])->name('sub-kriteria.create');
-    Route::post('/sub-kriteria', [SubKriteriaController::class, 'store'])->name('sub-kriteria.store');
-    Route::delete('/sub-kriteria/{id}', [SubKriteriaController::class, 'destroy'])->name('sub-kriteria.destroy');
+
 
     // ✅ Alternatif
     Route::resource('alternatif', AlternatifController::class);

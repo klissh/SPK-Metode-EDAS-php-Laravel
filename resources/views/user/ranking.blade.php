@@ -120,7 +120,7 @@
                             <td class="px-6 py-4 whitespace-nowrap text-center">
                                 <div class="flex flex-col items-center">
                                     <span class="text-sm font-semibold {{ $asColorClass }}">
-                                        {{ number_format($item['as'], 4) }}
+                                        {{ number_format($item['as'], 3) }}
                                     </span>
                                     <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5 mt-2 overflow-hidden">
                                         <div class="h-2.5 rounded-full {{ $asValue >= 0.7 ? 'bg-green-500' : ($asValue >= 0.4 ? 'bg-yellow-500' : 'bg-red-500') }}" style="width: {{ min($asValue * 100, 100) }}%"></div>

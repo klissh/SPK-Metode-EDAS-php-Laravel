@@ -12,13 +12,12 @@ class AlternatifController extends Controller
     public function index()
     {
         if (!session('jenis_analisis_id')) {
-        return redirect()->route('jenis-analisis.index')->with('error', 'Silakan pilih jenis analisis terlebih dahulu.');}
+            return redirect()->route('jenis-analisis.index')->with('error', 'Silakan pilih jenis analisis terlebih dahulu.');
+        }
         $jenis_analisis_id = session('jenis_analisis_id');
         $jenis_analisis = JenisAnalisis::find($jenis_analisis_id); // pastikan pakai model yang sesuai
         $alternatifs = Alternatif::where('jenis_analisis_id', session('jenis_analisis_id'))->get();
         return view('alternatif.index', compact('alternatifs', 'jenis_analisis'));
-
-        
     }
 
     public function create()
@@ -57,11 +56,20 @@ class AlternatifController extends Controller
     {
         $alternatif = Alternatif::findOrFail($id);
 
+        // Validasi hanya untuk nama_alternatif
         $request->validate([
+            'code' => [
+                'required',
+                Rule::unique('alternatifs')->ignore($alternatif->id)->where(fn($query) =>
+                    $query->where('jenis_analisis_id', session('jenis_analisis_id'))
+                )
+            ],
             'nama_alternatif' => 'required|string|max:255',
         ]);
 
+        // Update kode alternatif dan nama alternatif
         $alternatif->update([
+            'code' => $request->code,
             'nama_alternatif' => $request->nama_alternatif,
         ]);
 

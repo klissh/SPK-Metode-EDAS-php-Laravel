@@ -34,13 +34,13 @@
             {{-- Desktop Tabs with Enhanced Icons and Animations --}}
             <nav class="hidden md:flex border-b border-gray-200 bg-gradient-to-r from-blue-50 to-white" aria-label="Tabs">
                 <div class="w-full flex overflow-x-auto scrollbar-hide">
-                    <button class="group tab-btn active flex items-center gap-2 px-6 py-4 text-sm font-medium border-b-2 border-blue-600 text-blue-600 bg-blue-50 whitespace-nowrap transition-all duration-200 hover:bg-blue-100" data-target="matriks">
-                        <div class="tab-icon p-1.5 rounded-md bg-blue-200 text-blue-600 group-hover:bg-blue-300 transition-colors duration-200 flex items-center justify-center group-hover:rotate-12 transform transition-transform">
+                    <button class="group tab-btn flex items-center gap-2 px-6 py-4 text-sm font-medium border-b-2 border-transparent text-gray-600 hover:text-blue-600 whitespace-nowrap transition-all duration-200 hover:bg-blue-50" data-target="matriks">
+                        <div class="tab-icon p-1.5 rounded-md bg-blue-100 text-blue-600 group-hover:bg-blue-200 transition-colors duration-200 flex items-center justify-center group-hover:rotate-12 transform transition-transform">
                             <i class="bi bi-grid-3x3 text-lg"></i>
                         </div>
                         <span class="tab-text relative">
                             Matriks Keputusan
-                            <span class="tab-underline absolute -bottom-1 left-0 w-full h-0.5 bg-blue-600 transform scale-x-100 transition-transform origin-left"></span>
+                            <span class="tab-underline absolute -bottom-1 left-0 w-full h-0.5 bg-blue-600 transform scale-x-0 transition-transform origin-left"></span>
                         </span>
                     </button>
                     <button class="group tab-btn flex items-center gap-2 px-6 py-4 text-sm font-medium border-b-2 border-transparent text-gray-600 hover:text-blue-600 whitespace-nowrap transition-all duration-200 hover:bg-blue-50" data-target="pda-nda">
@@ -75,11 +75,11 @@
 
             {{-- Enhanced Mobile Tabs with Animations --}}
             <div id="mobile-tab-menu" class="hidden md:hidden absolute z-10 w-full bg-white border-b border-gray-200 shadow-md divide-y divide-gray-100 transform transition-all duration-300 origin-top scale-y-95 opacity-0" style="transform-origin: top center;">
-                <button class="mobile-tab-btn active w-full text-left px-4 py-3 flex items-center gap-2 bg-blue-50 text-blue-600 font-medium hover:bg-blue-100 transition-colors duration-200" data-target="matriks">
+                <button class="mobile-tab-btn w-full text-left px-4 py-3 flex items-center gap-2 text-gray-600 hover:bg-gray-50 transition-colors duration-200" data-target="matriks">
                     <i class="bi bi-grid-3x3 text-blue-600"></i> 
                     <span class="mobile-tab-text relative">
                         Matriks Keputusan
-                        <span class="mobile-tab-underline absolute -bottom-1 left-0 w-full h-0.5 bg-blue-600 transform scale-x-100 transition-transform origin-left"></span>
+                        <span class="mobile-tab-underline absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 transform scale-x-0 transition-transform origin-left"></span>
                     </span>
                 </button>
                 <button class="mobile-tab-btn w-full text-left px-4 py-3 flex items-center gap-2 text-gray-600 hover:bg-gray-50 transition-colors duration-200" data-target="pda-nda">
@@ -454,8 +454,6 @@
         const mobileTabMenu = document.getElementById('mobile-tab-menu');
         const nextTabButtons = document.querySelectorAll('.next-tab-btn');
         const prevTabButtons = document.querySelectorAll('.prev-tab-btn');
-        const tabUnderlines = document.querySelectorAll('.tab-underline');
-        const mobileTabUnderlines = document.querySelectorAll('.mobile-tab-underline');
         
         // Tab step mapping
         const tabSteps = {
@@ -467,37 +465,74 @@
         
         // Function to switch tabs with enhanced animations
         function switchTab(targetId) {
-            // Update tab buttons and underlines
+            // Update tab buttons and their styling
             tabButtons.forEach(btn => {
                 const btnTarget = btn.getAttribute('data-target');
+                
                 if (btnTarget === targetId) {
+                    // Add active classes
                     btn.classList.add('active');
                     
-                    // Find and animate the underline for this button
+                    // Update desktop tab styling
                     if (btn.classList.contains('tab-btn')) {
-                        const underline = btn.querySelector('.tab-underline');
-                        if (underline) {
-                            underline.style.transform = 'scale-x-100';
+                        btn.classList.remove('border-transparent', 'text-gray-600');
+                        btn.classList.add('border-blue-600', 'text-blue-600', 'bg-blue-50');
+                        
+                        // Update icon background for active tab
+                        const icon = btn.querySelector('.tab-icon');
+                        if (icon) {
+                            icon.classList.add('bg-blue-200');
                         }
-                    } else if (btn.classList.contains('mobile-tab-btn')) {
-                        const underline = btn.querySelector('.mobile-tab-underline');
+                        
+                        // Show underline
+                        const underline = btn.querySelector('.tab-underline');
                         if (underline) {
                             underline.style.transform = 'scale-x-100';
                         }
                     }
+                    
+                    // Update mobile tab styling
+                    if (btn.classList.contains('mobile-tab-btn')) {
+                        btn.classList.remove('text-gray-600');
+                        btn.classList.add('bg-blue-50', 'text-blue-600', 'font-medium');
+                        
+                        // Show mobile underline
+                        const mobileUnderline = btn.querySelector('.mobile-tab-underline');
+                        if (mobileUnderline) {
+                            mobileUnderline.style.transform = 'scale-x-100';
+                        }
+                    }
                 } else {
+                    // Remove active classes
                     btn.classList.remove('active');
                     
-                    // Reset the underline for other buttons
+                    // Reset desktop tab styling
                     if (btn.classList.contains('tab-btn')) {
+                        btn.classList.remove('border-blue-600', 'text-blue-600', 'bg-blue-50');
+                        btn.classList.add('border-transparent', 'text-gray-600');
+                        
+                        // Reset icon background
+                        const icon = btn.querySelector('.tab-icon');
+                        if (icon) {
+                            icon.classList.remove('bg-blue-200');
+                        }
+                        
+                        // Hide underline
                         const underline = btn.querySelector('.tab-underline');
                         if (underline) {
                             underline.style.transform = 'scale-x-0';
                         }
-                    } else if (btn.classList.contains('mobile-tab-btn')) {
-                        const underline = btn.querySelector('.mobile-tab-underline');
-                        if (underline) {
-                            underline.style.transform = 'scale-x-0';
+                    }
+                    
+                    // Reset mobile tab styling
+                    if (btn.classList.contains('mobile-tab-btn')) {
+                        btn.classList.remove('bg-blue-50', 'text-blue-600', 'font-medium');
+                        btn.classList.add('text-gray-600');
+                        
+                        // Hide mobile underline
+                        const mobileUnderline = btn.querySelector('.mobile-tab-underline');
+                        if (mobileUnderline) {
+                            mobileUnderline.style.transform = 'scale-x-0';
                         }
                     }
                 }
@@ -543,7 +578,7 @@
                 }, 300);
             }
             
-            // Toggle mobile menu with animation
+            // Close mobile menu if open
             if (mobileTabMenu && !mobileTabMenu.classList.contains('hidden')) {
                 mobileTabMenu.classList.add('scale-y-95', 'opacity-0');
                 setTimeout(() => {
